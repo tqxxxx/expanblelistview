@@ -1,11 +1,13 @@
 package com.cxmx.expanblelistview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class SecondAdapter extends BaseExpandableListAdapter {
     private List<String> groupList = new ArrayList<>();
     private List<String> ThridList = new ArrayList<>();
     private List<List<String>> GroupList = new ArrayList<>();
+    private List<String> peopleName = new ArrayList<>();
     private Context context;
 
     private GroupViewHolder groupViewHolder;
@@ -71,13 +74,14 @@ public class SecondAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.elv_group_layout, null);
-            groupViewHolder = new GroupViewHolder(convertView);
-            convertView.setTag(groupViewHolder);
-        } else {
-            groupViewHolder = (GroupViewHolder) convertView.getTag();
-        }
+//        if (convertView == null) {
+        convertView = LayoutInflater.from(context).inflate(R.layout.elv_group_layout, null);
+        groupViewHolder = new GroupViewHolder(convertView);
+        convertView.setTag(groupViewHolder);
+//        } else {
+//            groupViewHolder = (GroupViewHolder) convertView.getTag();
+//        }
+        Log.e("m_tag", "groupName: " + groupList.get(groupPosition));
         groupViewHolder.groupName.setText(groupList.get(groupPosition));
         if (isExpanded) {
             groupViewHolder.ivOpenStyle.setImageResource(R.drawable.single_btn_pre);
@@ -89,13 +93,14 @@ public class SecondAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.elv_people_layout, null);
-            peoPleViewHolder = new PeoPleViewHolder(convertView);
-            peoPleViewHolder.tvPeopleName.setText(GroupList.get(groupPosition).get(childPosition));
-        } else {
-            peoPleViewHolder = (PeoPleViewHolder) convertView.getTag();
-        }
+//        if (convertView == null) {
+        convertView = LayoutInflater.from(context).inflate(R.layout.elv_people_layout, null);
+        peoPleViewHolder = new PeoPleViewHolder(convertView);
+        peopleName = GroupList.get(groupPosition);
+        peoPleViewHolder.tvPeople.setText(peopleName.get(childPosition));
+//        } else {
+//            peoPleViewHolder = (PeoPleViewHolder) convertView.getTag();
+//        }
         return convertView;
     }
 
@@ -119,7 +124,7 @@ public class SecondAdapter extends BaseExpandableListAdapter {
 
     static class PeoPleViewHolder {
         @BindView(R.id.tv_people_name)
-        TextView tvPeopleName;
+        TextView tvPeople;
 
         PeoPleViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDate() {
+        //最外层模拟数据载入
         for (int i = 0; i < 4; i++) {
             FirstList.add("项目" + (i + 1));
         }
@@ -51,27 +52,28 @@ public class MainActivity extends AppCompatActivity {
                     GroupList = new ArrayList<>();
                     GroupList.clear();
 //                    GroupList = SecondList.get(groupPosition);
+                    //模拟第二层数据加载
                     for (int i = 0; i < 4; i++) {
                         GroupList.add("项目" + (groupPosition + 1) + "的小组" + (i + 1));
 //                        Log.e("m_tag", "onGroupClick: " + (i + 1) + "小组，GroupList" + GroupList.size());
                     }
-                    Log.e("m_tag", "onGroupClick: 点击了项目"+(groupPosition + 1) );
-                    SecondList.set(groupPosition,GroupList);
+                    Log.e("m_tag", "onGroupClick: 点击了项目" + (groupPosition + 1));
+                    SecondList.set(groupPosition, GroupList);
                     elvFirstOrder.expandGroup(groupPosition, true);
                 }
                 firstAdapter.notifyDataSetChanged();
                 return true;
             }
         });
-//        elvFirstOrder.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//                for (int i = 0; i < firstAdapter.getGroupCount(); i++) {
-//                    if (i != groupPosition) {
-//                        elvFirstOrder.collapseGroup(i);
-//                    }
-//                }
-//            }
-//        });
+        elvFirstOrder.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0; i < firstAdapter.getGroupCount(); i++) {
+                    if (i != groupPosition) {
+                        elvFirstOrder.collapseGroup(i);
+                    }
+                }
+            }
+        });
     }
 }

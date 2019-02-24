@@ -37,10 +37,10 @@ public class FirstAdapter extends BaseExpandableListAdapter {
     private ProjectViewHolder projectViewHolder;
     private GroupViewHolder groupViewHolder;
 
-    public FirstAdapter(Context context, List<String> list, List<List<String>> groupList) {
+    public FirstAdapter(Context context, List<String> list, List<List<String>> mgroupList) {
         this.context = context;
         this.list = list;
-        this.groupList = groupList;
+        this.groupList = mgroupList;
     }
 
     @Override
@@ -50,7 +50,6 @@ public class FirstAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Log.e("m_tag", "getChildrenCount: " + groupList.get(groupPosition).size());
         //null == groupList ? 0 : groupList.get(groupPosition).size()
         return 1;
     }
@@ -62,7 +61,7 @@ public class FirstAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        Log.e("m_tag", "getChild====: " + groupList.get(childPosition).isEmpty());
+        Log.e("m_tag", "点击了====:项目" + groupPosition + "小组" + childPosition);
         return groupList.get(groupPosition).get(childPosition);
     }
 
@@ -102,47 +101,39 @@ public class FirstAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_group, null);
-            groupViewHolder = new GroupViewHolder(convertView);
-            childList = groupList.get(groupPosition);
-            secondAdapter = new SecondAdapter(context, childList, PeopleList);
-            groupViewHolder.elvSecondOrder.setAdapter(secondAdapter);
-            convertView.setTag(groupViewHolder);
-        } else {
-            groupViewHolder = (GroupViewHolder) convertView.getTag();
-        }
-
-        groupViewHolder.elvSecondOrder.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                for (int i = 0; i < secondAdapter.getGroupCount(); i++) {
-                    if (i != groupPosition) {
-                        groupViewHolder.elvSecondOrder.collapseGroup(i);
-                    }
-                }
-            }
-        });
+//        if (convertView == null) {
+        convertView = LayoutInflater.from(context).inflate(R.layout.list_group, null);
+        groupViewHolder = new GroupViewHolder(convertView);
+        childList = groupList.get(groupPosition);
+        secondAdapter = new SecondAdapter(context, childList, PeopleList);
+        groupViewHolder.elvSecondOrder.setAdapter(secondAdapter);
+        convertView.setTag(groupViewHolder);
+//        } else {
+//            groupViewHolder = (GroupViewHolder) convertView.getTag();
+//        }
         groupViewHolder.elvSecondOrder.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, final int mGroupPosition, long id) {
                 if (groupViewHolder.elvSecondOrder.isGroupExpanded(mGroupPosition)) {
                     groupViewHolder.elvSecondOrder.collapseGroup(mGroupPosition);
+                    Log.e("m_tag", "close--->");
                 } else {
-                    PeopleList.clear();
+//                    PeopleList.clear();
                     for (int i = 0; i < childList.size(); i++) {
                         PeopleList.add(new ArrayList<String>());
                     }
                     ThridList.clear();
-                    ThridList = PeopleList.get(mGroupPosition);
+                    //模拟数据请求配置
                     for (int i = 0; i < 4; i++) {
                         ThridList.add("组员" + i);
-                        Log.e("m_tag", "组员: "+i );
+                        Log.e("m_tag", "组员: " + i);
                     }
+                    PeopleList.set(mGroupPosition, ThridList);
                     mainActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             groupViewHolder.elvSecondOrder.expandGroup(mGroupPosition, true);
+                            Log.e("m_tag", "open--->");
                             secondAdapter.notifyDataSetChanged();
                         }
                     });
@@ -162,6 +153,16 @@ public class FirstAdapter extends BaseExpandableListAdapter {
                     }
                 });
                 return true;
+            }
+        });
+        groupViewHolder.elvSecondOrder.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0; i < secondAdapter.getGroupCount(); i++) {
+                    if (i != groupPosition) {
+                        groupViewHolder.elvSecondOrder.collapseGroup(i);
+                    }
+                }
             }
         });
         return convertView;

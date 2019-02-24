@@ -10,9 +10,9 @@
         android:id="@+id/elv_first_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:groupIndicator="@null"
         android:layout_marginTop="10dp"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:groupIndicator="@null">
     </ExpandableListView>
 
 </android.support.constraint.ConstraintLayout>
